@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import bcrypt from "bcryptjs";
 import { NotificationManager } from "react-notifications";
 import Router from "next/router";
+import Link from "next/link";
 
 export default function Signup({ data }) {
   const emailRef = useRef();
@@ -53,7 +54,7 @@ export default function Signup({ data }) {
 
         <div>
           {/*   eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/login">Login</a>
+          <Link href="/login">Login</Link>
         </div>
 
         <button className="but" onClick={sub}>
