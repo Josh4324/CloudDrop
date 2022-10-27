@@ -4,6 +4,7 @@ import Link from "next/link";
 export default function Sidebar() {
   const logout = () => {
     localStorage.removeItem("cloud-user");
+    localStorage.removeItem("cloud-email");
     window.location.href = "/login";
   };
   return (

@@ -9,6 +9,10 @@ export default function Signup({ data }) {
   const passwordRef = useRef();
 
   const sub = () => {
+    if (emailRef.current.value === "" || passwordRef.current.value === "") {
+      return NotificationManager.error("Please enter your email or password");
+    }
+
     const hashedPassword = bcrypt.hashSync(
       passwordRef.current.value,
       process.env.salt
@@ -26,12 +30,13 @@ export default function Signup({ data }) {
     fetch("/api/signup", options)
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
-        if (response) {
+        if (response.id) {
           localStorage.setItem("cloud-user", response.id);
           localStorage.setItem("cloud-email", emailRef.current.value);
           NotificationManager.success("Signup was successfully", "Success");
           window.location.href = "/";
+        } else if ((response.message = "User already exists")) {
+          NotificationManager.error("User already exists", "Error");
         }
       })
       .catch((err) => console.error(err));

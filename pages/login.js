@@ -8,6 +8,9 @@ export default function Login() {
   const passwordRef = useRef();
 
   const sub = () => {
+    if (emailRef.current.value === "" || passwordRef.current.value === "") {
+      return NotificationManager.error("Please enter your email or password");
+    }
     const options = {
       method: "POST",
       body: JSON.stringify({ email: emailRef.current.value }),
