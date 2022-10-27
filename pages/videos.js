@@ -16,7 +16,7 @@ export default function Files() {
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
 
-    fetch(`/api/upload?search=${user}`)
+    fetch(`/api/files?search=${user}`)
       .then((response) => response.json())
       .then((response) => {
         let videos = [];

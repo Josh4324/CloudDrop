@@ -29,6 +29,7 @@ export default function Signup({ data }) {
         console.log(response);
         if (response) {
           localStorage.setItem("cloud-user", response.id);
+          localStorage.setItem("cloud-email", emailRef.current.value);
           NotificationManager.success("Signup was successfully", "Success");
           window.location.href = "/";
         }

@@ -69,3 +69,8 @@
   font-size: 18px;
   padding: 20px;
 }
+
+.cloud {
+  display: flex;
+  justify-content: space-between;
+}

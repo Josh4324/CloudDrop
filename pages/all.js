@@ -16,7 +16,7 @@ export default function All() {
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
 
-    fetch(`/api/upload?search=${user}`)
+    fetch(`/api/files?search=${user}`)
       .then((response) => response.json())
       .then((response) => {
         setAll(response);

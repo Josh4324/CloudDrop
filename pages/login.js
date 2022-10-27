@@ -27,6 +27,7 @@ export default function Login() {
                   "Success"
                 );
                 localStorage.setItem("cloud-user", response[0].id);
+                localStorage.setItem("cloud-email", emailRef.current.value);
                 window.location.href = "/";
               } else {
                 NotificationManager.error("Wrong email or password", "Error");

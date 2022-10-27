@@ -14,8 +14,11 @@ export default function Home() {
   const [audios, setAudio] = useState([]);
   const [others, setOthers] = useState([]);
   const [recent, setRecent] = useState([]);
+  const [email, setEmail] = useState("");
 
   const wigRef = useRef();
+
+  const cloudName = process.env.cloudName;
 
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
@@ -24,8 +27,8 @@ export default function Home() {
     }
     const myWidget = window.cloudinary.createUploadWidget(
       {
-        cloudName: process.env.cloudName,
-        uploadPreset: process.env.uploadPreset,
+        cloudName: "josh4324",
+        uploadPreset: "hq1e5jub",
       },
       (error, result) => {
         if (!error && result && result.event === "success") {
@@ -98,12 +101,14 @@ export default function Home() {
       }
     );
     wigRef.current = myWidget;
-  }, []);
+  }, [cloudName]);
 
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
+    const email = localStorage.getItem("cloud-email");
+    setEmail(email);
 
-    fetch(`/api/upload?search=${user}`)
+    fetch(`/api/files?search=${user}`)
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
@@ -163,7 +168,11 @@ export default function Home() {
       <div className={styles.homeflex}>
         <Sidebar />
         <div className={styles.home}>
-          <h1 className={styles.homehead}>CloudDrop</h1>
+          <div className={styles.cloud}>
+            <h1 className={styles.homehead}>CloudDrop </h1>
+            <h3>{email}</h3>
+          </div>
+
           <button type="button" onClick={showWidget} className={styles.upload}>
             Upload File
           </button>
