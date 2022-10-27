@@ -1,0 +1,43 @@
+html {
+  background-color: #63cad6;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.input {
+  width: 90%;
+  height: 64px;
+  border: 1px solid white;
+  border-radius: 8px;
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  padding-left: 25px;
+  color: #828282;
+  background-color: transparent;
+  margin-bottom: 30px;
+}
+
+.form {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+}
+
+.but {
+  width: 254px;
+  height: 64px;
+  margin-top: 50px;
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  color: #001b1c;
+  background: #b18f32;
+  border: none;
+}
