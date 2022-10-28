@@ -12,17 +12,18 @@ export default function handler(req, res) {
       body: `{"filter":{"email":{"$contains":"${email}"}},"page":{"size":15}}`,
     };
 
-    fetch(
-      "https://adesanya-joshua-ayodeji-s-workspace-53aqad.eu-west-1.xata.sh/db/CloudDrop:main/tables/users/query",
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        return res.status(200).json(response.records);
-      })
-      .catch((err) => console.error(err));
-  } else {
-    // Handle any other HTTP method
+    (async () => {
+      try {
+        const response = await fetch(
+          `${process.env.database}:main/tables/users/query`,
+          options
+        );
+
+        const data = await response.json();
+        return res.status(200).json(data.records);
+      } catch (err) {
+        return res.status(500).json({ message: "An error occured" });
+      }
+    })();
   }
 }

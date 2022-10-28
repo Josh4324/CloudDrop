@@ -7,7 +7,6 @@ import Script from "next/script";
 import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
-  const [files, setFiles] = useState([]);
   const [images, setImages] = useState([]);
   const [documents, setDoc] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -17,8 +16,6 @@ export default function Home() {
   const [email, setEmail] = useState("");
 
   const wigRef = useRef();
-
-  const cloudName = process.env.cloudName;
 
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
@@ -32,12 +29,9 @@ export default function Home() {
       },
       (error, result) => {
         if (!error && result && result.event === "success") {
-          console.log(result);
-          console.log("Done! Here is the image info: ", result.info);
           const typelist = result.info.secure_url.split(".");
           const len = typelist.length - 1;
           let type;
-
           if (
             typelist[len] === "jpeg" ||
             typelist[len] === "jpg" ||
@@ -85,9 +79,9 @@ export default function Home() {
             body: JSON.stringify(cred),
           };
 
-          fetch("/api/upload", options)
-            .then((response) => response.json())
-            .then((response) => {
+          (async () => {
+            try {
+              const response = await fetch("/api/upload", options);
               if (response) {
                 NotificationManager.success(
                   "File uploaded successfully",
@@ -95,30 +89,34 @@ export default function Home() {
                 );
                 window.location.href = "/";
               }
-            })
-            .catch((err) => console.error(err));
+            } catch (err) {
+              console.log(err);
+            }
+          })();
         }
       }
     );
+
     wigRef.current = myWidget;
-  }, [cloudName]);
+  }, []);
 
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
     const email = localStorage.getItem("cloud-email");
     setEmail(email);
 
-    fetch(`/api/files?search=${user}`)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
+    (async () => {
+      try {
+        const response = await fetch(`/api/files?search=${user}`);
+        const data = await response.json();
+
         let images = [];
         let documents = [];
         let videos = [];
         let audios = [];
         let others = [];
-        let recent = [];
-        response.map((item) => {
+
+        data.map((item) => {
           if (item.type === "image") {
             images.push(item);
           }
@@ -134,19 +132,19 @@ export default function Home() {
           if (item.type === "others") {
             others.push(item);
           }
-
-          setFiles(response);
-          setAudio(audios);
-          setVideos(videos);
-          setDoc(documents);
-          setOthers(others);
-          setImages(images);
         });
 
-        const sorted = response.slice(0, 5);
-        setRecent(sorted);
-      })
-      .catch((err) => console.error(err));
+        setAudio(audios);
+        setVideos(videos);
+        setDoc(documents);
+        setOthers(others);
+        setImages(images);
+        const recent = data.slice(0, 5);
+        setRecent(recent);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
 
   const showWidget = () => {
@@ -179,11 +177,13 @@ export default function Home() {
 
           {recent.length > 0 ? (
             <div className={styles.box1}>
-              <h3>Recent</h3>
+              <h3 className={styles.head}>Recent</h3>
               {recent.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}
@@ -192,11 +192,13 @@ export default function Home() {
 
           {images.length > 0 ? (
             <div className={styles.box1}>
-              <h3>Images</h3>
+              <h3 className={styles.head}>Images</h3>
               {images.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}
@@ -205,11 +207,13 @@ export default function Home() {
 
           {audios.length > 0 ? (
             <div className={styles.box1}>
-              <h3>Audios</h3>
+              <h3 className={styles.head}>Audios</h3>
               {audios.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}
@@ -218,11 +222,13 @@ export default function Home() {
 
           {videos.length > 0 ? (
             <div className={styles.box1}>
-              <h3>Videos</h3>
-              {audios.map((item) => {
+              <h3 className={styles.head}>Videos</h3>
+              {videos.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}
@@ -231,11 +237,13 @@ export default function Home() {
 
           {documents.length > 0 ? (
             <div className={styles.box1}>
-              <h3>Documents</h3>
+              <h3 className={styles.head}>Documents</h3>
               {documents.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}
@@ -244,11 +252,13 @@ export default function Home() {
 
           {others.length > 0 ? (
             <div className={styles.box1}>
-              <h3>Others</h3>
+              <h3 className={styles.head}>Others</h3>
               {others.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}

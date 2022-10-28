@@ -4,7 +4,7 @@ export default function handler(req, res) {
   if (req.method === "POST") {
     const cred = JSON.parse(req.body);
 
-    const coptions = {
+    const options1 = {
       method: "POST",
       headers: {
         Authorization: process.env.XATA,
@@ -12,7 +12,8 @@ export default function handler(req, res) {
       },
       body: `{"filter":{"email":{"$contains":"${cred.email}"}},"page":{"size":15}}`,
     };
-    const options = {
+
+    const options2 = {
       method: "POST",
       headers: {
         Authorization: process.env.XATA,
@@ -21,28 +22,28 @@ export default function handler(req, res) {
       body: JSON.stringify(cred),
     };
 
-    fetch(
-      "https://adesanya-joshua-ayodeji-s-workspace-53aqad.eu-west-1.xata.sh/db/CloudDrop:main/tables/users/query",
-      coptions
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("here", response);
-        if (response) {
+    (async () => {
+      try {
+        const response = await fetch(
+          `${process.env.database}:main/tables/users/query`,
+          options1
+        );
+        const data = await response.json();
+        if (data.records.length > 0) {
           return res.status(400).json({ message: "User already exists" });
         } else {
-          console.log("2");
-          fetch(
-            "https://adesanya-joshua-ayodeji-s-workspace-53aqad.eu-west-1.xata.sh/db/CloudDrop:main/tables/users/data?columns=id",
-            options
-          )
-            .then((response) => response.json())
-            .then((response) => res.status(200).json(response))
-            .catch((err) => console.error(err));
+          console.log("logging2");
+          const response2 = await fetch(
+            `${process.env.database}:main/tables/users/data?columns=id`,
+            options2
+          );
+          const data2 = await response2.json();
+          return res.status(200).json(data2);
         }
-      })
-      .catch((err) => console.error(err));
-  } else {
-    // Handle any other HTTP method
+      } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "An error occured" });
+      }
+    })();
   }
 }

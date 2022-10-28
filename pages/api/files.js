@@ -6,20 +6,24 @@ export default function handler(req, res) {
     const options = {
       method: "POST",
       headers: {
-        Authorization: "Bearer xau_9D3hVxBgdCRx966VutmQnvwpKgaWSvFc5",
+        Authorization: process.env.XATA,
         "Content-Type": "application/json",
       },
       body: `{"filter":{"userid":"${search}"},"page":{"size":15}}`,
     };
 
-    fetch(
-      "https://adesanya-joshua-ayodeji-s-workspace-53aqad.eu-west-1.xata.sh/db/CloudDrop:main/tables/files/query",
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        res.status(200).json(response.records);
-      })
-      .catch((err) => console.error(err));
+    (async () => {
+      try {
+        const response = await fetch(
+          `${process.env.database}:main/tables/files/query`,
+          options
+        );
+
+        const data = await response.json();
+        return res.status(200).json(data.records);
+      } catch (err) {
+        return res.status(500).json({ message: "An error occured" });
+      }
+    })();
   }
 }

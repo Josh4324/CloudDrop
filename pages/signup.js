@@ -8,7 +8,7 @@ export default function Signup({ data }) {
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  const sub = () => {
+  const sub = async () => {
     if (emailRef.current.value === "" || passwordRef.current.value === "") {
       return NotificationManager.error("Please enter your email or password");
     }
@@ -27,19 +27,23 @@ export default function Signup({ data }) {
       body: JSON.stringify(cred),
     };
 
-    fetch("/api/signup", options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.id) {
-          localStorage.setItem("cloud-user", response.id);
-          localStorage.setItem("cloud-email", emailRef.current.value);
-          NotificationManager.success("Signup was successfully", "Success");
-          window.location.href = "/";
-        } else if ((response.message = "User already exists")) {
-          NotificationManager.error("User already exists", "Error");
-        }
-      })
-      .catch((err) => console.error(err));
+    NotificationManager.info("Loading.......", "Info");
+
+    try {
+      const response = await fetch("/api/signup", options);
+      const data = await response.json();
+      console.log(data);
+      if (data.id) {
+        localStorage.setItem("cloud-user", response.id);
+        localStorage.setItem("cloud-email", emailRef.current.value);
+        NotificationManager.success("Signup was successfully", "Success");
+        window.location.href = "/";
+      } else if ((response.message = "User already exists")) {
+        NotificationManager.error("User already exists", "Error");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div>

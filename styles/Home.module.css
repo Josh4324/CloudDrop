@@ -13,31 +13,6 @@
   font-size: 30px;
 }
 
-.custom_file_input::-webkit-file-upload-button {
-  visibility: hidden;
-}
-.custom_file_input::before {
-  content: "Select some files";
-  display: inline-block;
-  background: red;
-  border: 1px solid #999;
-  border-radius: 3px;
-  padding: 5px 8px;
-  outline: none;
-  white-space: nowrap;
-  -webkit-user-select: none;
-  cursor: pointer;
-  text-shadow: 1px 1px #fff;
-  font-weight: 700;
-  font-size: 10pt;
-}
-.custom_file_input:hover::before {
-  border-color: black;
-}
-.custom_file_input:active::before {
-  background: red;
-}
-
 .upload {
   width: 360px;
   height: 96px;
@@ -46,7 +21,7 @@
   margin-right: auto;
   border: none;
   /* Hotel/Hotel Button */
-  background: #b18f32;
+  background: white;
   margin-top: 100px;
   font-family: "Nunito Sans";
   font-style: normal;
@@ -68,9 +43,30 @@
   font-weight: 400;
   font-size: 18px;
   padding: 20px;
+  color: black;
 }
 
 .cloud {
   display: flex;
   justify-content: space-between;
+}
+
+.home_text {
+  color: black;
+}
+
+.head {
+  color: white;
+  font-size: 30px;
+  font-family: "Nunito Sans";
+  font-style: normal;
+}
+
+.head2 {
+  color: white;
+  font-size: 30px;
+  font-family: "Nunito Sans";
+  font-style: normal;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }

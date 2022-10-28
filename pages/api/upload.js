@@ -12,12 +12,18 @@ export default function handler(req, res) {
       body: JSON.stringify(cred),
     };
 
-    fetch(
-      "https://adesanya-joshua-ayodeji-s-workspace-53aqad.eu-west-1.xata.sh/db/CloudDrop:main/tables/files/data?columns=id",
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => res.status(200).json(response))
-      .catch((err) => console.error(err));
+    (async () => {
+      try {
+        const response = await fetch(
+          `${process.env.database}:main/tables/files/data?columns=id`,
+          options
+        );
+
+        const data = await response.json();
+        return res.status(200).json(data);
+      } catch (err) {
+        return res.status(500).json({ message: "An error occured" });
+      }
+    })();
   }
 }

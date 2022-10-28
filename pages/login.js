@@ -15,21 +15,23 @@ export default function Login() {
       method: "POST",
       body: JSON.stringify({ email: emailRef.current.value }),
     };
+    NotificationManager.info("Loading.......", "Info");
 
-    fetch("/api/login", options)
-      .then((response) => response.json())
-      .then((response) => {
-        if (response) {
+    (async () => {
+      try {
+        const response = await fetch("/api/login", options);
+        const data = await response.json();
+        if (data) {
           bcrypt.compare(
             passwordRef.current.value,
-            response[0].password,
-            function (err, res) {
-              if (res === true) {
+            data[0].password,
+            (err, result) => {
+              if (result === true) {
                 NotificationManager.success(
                   "Login was successfully",
                   "Success"
                 );
-                localStorage.setItem("cloud-user", response[0].id);
+                localStorage.setItem("cloud-user", data[0].id);
                 localStorage.setItem("cloud-email", emailRef.current.value);
                 window.location.href = "/";
               } else {
@@ -38,8 +40,10 @@ export default function Login() {
             }
           );
         }
-      })
-      .catch((err) => console.error(err));
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   };
   return (
     <div>

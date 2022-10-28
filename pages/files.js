@@ -6,29 +6,28 @@ import Sidebar from "../components/Sidebar";
 
 export default function Files() {
   const [documents, setDoc] = useState([]);
+
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
     if (user === null) {
       window.location.href = "/login";
     }
-  }, []);
 
-  useEffect(() => {
-    const user = localStorage.getItem("cloud-user");
-
-    fetch(`/api/files?search=${user}`)
-      .then((response) => response.json())
-      .then((response) => {
+    (async () => {
+      try {
+        const response = await fetch(`/api/files?search=${user}`);
+        const data = await response.json();
         let documents = [];
-        response.map((item) => {
+        data.map((item) => {
           if (item.type === "documents") {
             documents.push(item);
           }
-          console.log(documents);
           setDoc(documents);
         });
-      })
-      .catch((err) => console.error(err));
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
 
   return (
@@ -41,12 +40,15 @@ export default function Files() {
         <Sidebar />
         <div className={styles.home}>
           <h1 className={styles.homehead}>CloudDrop</h1>
+          <h2 className={styles.head2}>Documents</h2>
           {documents.length > 0 ? (
             <div className={styles.box1}>
               {documents.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}

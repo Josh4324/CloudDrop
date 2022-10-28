@@ -16,19 +16,21 @@ export default function Files() {
   useEffect(() => {
     const user = localStorage.getItem("cloud-user");
 
-    fetch(`/api/files?search=${user}`)
-      .then((response) => response.json())
-      .then((response) => {
+    (async () => {
+      try {
+        const response = await fetch(`/api/files?search=${user}`);
+        const data = await response.json();
         let videos = [];
-        response.map((item) => {
-          if (item.type === "videos") {
+        data.map((item) => {
+          if (item.type === "video") {
             videos.push(item);
           }
-          console.log(videos);
-          setVideos(videos);
         });
-      })
-      .catch((err) => console.error(err));
+        setVideos(videos);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
   }, []);
   return (
     <div>
@@ -40,12 +42,15 @@ export default function Files() {
         <Sidebar />
         <div className={styles.home}>
           <h1 className={styles.homehead}>CloudDrop</h1>
+          <h2 className={styles.head2}>Videos</h2>
           {videos.length > 0 ? (
             <div className={styles.box1}>
               {videos.map((item) => {
                 return (
                   <div className={styles.file} key={item.name}>
-                    <a href={`${item.url}`}>{item.name}</a>
+                    <a className={styles.home_text} href={`${item.url}`}>
+                      {item.name}
+                    </a>
                   </div>
                 );
               })}
