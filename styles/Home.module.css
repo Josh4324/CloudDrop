@@ -11,6 +11,14 @@
   font-family: "Nunito Sans";
   font-style: normal;
   font-size: 30px;
+  color: white;
+}
+
+.homehead2 {
+  font-family: "Nunito Sans";
+  font-style: normal;
+  font-size: 20px;
+  color: white;
 }
 
 .upload {
@@ -69,4 +77,5 @@
   font-style: normal;
   margin-top: 30px;
   margin-bottom: 30px;
+  margin-top: 100px;
 }

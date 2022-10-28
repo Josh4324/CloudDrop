@@ -168,7 +168,7 @@ export default function Home() {
         <div className={styles.home}>
           <div className={styles.cloud}>
             <h1 className={styles.homehead}>CloudDrop </h1>
-            <h3>{email}</h3>
+            <h3 className={styles.homehead2}>{email}</h3>
           </div>
 
           <button type="button" onClick={showWidget} className={styles.upload}>
