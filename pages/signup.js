@@ -32,9 +32,8 @@ export default function Signup({ data }) {
     try {
       const response = await fetch("/api/signup", options);
       const data = await response.json();
-      console.log(data);
       if (data.id) {
-        localStorage.setItem("cloud-user", response.id);
+        localStorage.setItem("cloud-user", data.id);
         localStorage.setItem("cloud-email", emailRef.current.value);
         NotificationManager.success("Signup was successfully", "Success");
         window.location.href = "/";
@@ -48,7 +47,7 @@ export default function Signup({ data }) {
   return (
     <div>
       <div className="form">
-        <h2>Signup</h2>
+        <h2 className="white">Signup</h2>
         <div>
           <input className="input" ref={emailRef} placeholder="Enter Email" />
         </div>

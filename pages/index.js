@@ -22,6 +22,56 @@ export default function Home() {
     if (user === null) {
       window.location.href = "/login";
     }
+  }, []);
+
+  useEffect(() => {
+    const user = localStorage.getItem("cloud-user");
+    const email = localStorage.getItem("cloud-email");
+    setEmail(email);
+
+    (async () => {
+      try {
+        const response = await fetch(`/api/files?search=${user}`);
+        const data = await response.json();
+
+        let images = [];
+        let documents = [];
+        let videos = [];
+        let audios = [];
+        let others = [];
+
+        data.map((item) => {
+          if (item.type === "image") {
+            images.push(item);
+          }
+          if (item.type === "video") {
+            videos.push(item);
+          }
+          if (item.type === "audio") {
+            audios.push(item);
+          }
+          if (item.type === "documents") {
+            documents.push(item);
+          }
+          if (item.type === "others") {
+            others.push(item);
+          }
+        });
+
+        setAudio(audios);
+        setVideos(videos);
+        setDoc(documents);
+        setOthers(others);
+        setImages(images);
+        const recent = data.slice(0, 5);
+        setRecent(recent);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, []);
+
+  const showWidget = () => {
     const myWidget = window.cloudinary.createUploadWidget(
       {
         cloudName: "josh4324",
@@ -96,59 +146,7 @@ export default function Home() {
         }
       }
     );
-
-    wigRef.current = myWidget;
-  }, []);
-
-  useEffect(() => {
-    const user = localStorage.getItem("cloud-user");
-    const email = localStorage.getItem("cloud-email");
-    setEmail(email);
-
-    (async () => {
-      try {
-        const response = await fetch(`/api/files?search=${user}`);
-        const data = await response.json();
-
-        let images = [];
-        let documents = [];
-        let videos = [];
-        let audios = [];
-        let others = [];
-
-        data.map((item) => {
-          if (item.type === "image") {
-            images.push(item);
-          }
-          if (item.type === "video") {
-            videos.push(item);
-          }
-          if (item.type === "audio") {
-            audios.push(item);
-          }
-          if (item.type === "documents") {
-            documents.push(item);
-          }
-          if (item.type === "others") {
-            others.push(item);
-          }
-        });
-
-        setAudio(audios);
-        setVideos(videos);
-        setDoc(documents);
-        setOthers(others);
-        setImages(images);
-        const recent = data.slice(0, 5);
-        setRecent(recent);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
-
-  const showWidget = () => {
-    wigRef.current.open();
+    myWidget.open();
   };
 
   return (

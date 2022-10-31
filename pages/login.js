@@ -48,7 +48,7 @@ export default function Login() {
   return (
     <div>
       <div className="form">
-        <h2>Login</h2>
+        <h2 className="white">Login</h2>
         <div>
           <input className="input" ref={emailRef} placeholder="Enter Email" />
         </div>

@@ -46,3 +46,8 @@ a {
   background: white;
   border: none;
 }
+
+.white {
+  color: white;
+  margin-bottom: 50px;
+}
